@@ -11,10 +11,8 @@ platos = menu.keys
 masCaro = menu.rassoc(precios.max)[0]
 masBarato = menu.rassoc(precios.min)[0]
 precioPromedio = precios.inject { |e, sum| sum += e } / precios.length
-menuIVA = {}
-menu.each { |k,v| menuIVA[k] = v * 1.19 }
-menuDesc = menuIVA.dup
-menuDesc.each { |k,v| menuDesc[k] = v * 0.8 if k.to_s.split("_").length > 1 }
+menuIVA = menu.map { |k,v| [k, v * 1.19] }.to_h
+menuDesc = menu.map { |k,v| k.to_s.split("_").length > 1 ? [k, v * 0.8] : [k, v] }.to_h
 
 # puts print precios
 puts "El plato más caro es: #{masCaro}"
