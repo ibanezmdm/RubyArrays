@@ -303,9 +303,18 @@ movies = {
 	}
 }
 
-peliculasGenero = movies.map { |k,v| [k,v[:genre]] }.to_h.group_by { |k,v| v}.map { |k,v| [k,v.map { |e| e[0] }]}.to_h
+peliculasGenero = movies.map { |k, v| [k, v[:genre]] }.to_h.group_by { |k, v| v }.map { |k, v| [k, v.map { |e| e[0] }]}.to_h
+
 cantidadGenero = peliculasGenero.map { |k,v| [k, v.length] }.to_h
-# genero = movies.each { |k,v| puts v[:genre] }
+
+puts "ingrese rango de años separados con un espacio. Ej: 1990 2000"
+rango = gets.split(" ").map { |e| e.to_i }
+peliculasAño = movies.map { |k, v| [k, v[:realease_date].split(" ")[3].to_i] }.to_h.select { |k, v| v <= rango.max && v >= rango.min }
+
+# :good = 1, :bad = -1
+peliculasVotos = movies.map { |k,v| [k, v[:votes].group_by { |e| e }.map { |k, v| [k, v.length] }.to_h.map { |k, v| k == :bad ? -v : v }.inject { |sum, e| sum += e }] }.to_h.map { |k, v| [k, v < 0 ? :mala : v > 0 ? :buena : :regular]}.to_h
 
 pp peliculasGenero
 pp cantidadGenero
+pp peliculasAño
+pp peliculasVotos
